@@ -1,0 +1,123 @@
+graph TB
+    subgraph "User Access Layer"
+        Users[Users<br/>Mobile & Desktop Browsers]
+        CDN[Amazon CloudFront<br/>CDN + SSL/TLS]
+    end
+    
+    subgraph "AWS Region"
+        subgraph "VPC - Public Subnets"
+            ALB[Application Load Balancer<br/>ALB]
+            NAT[NAT Gateway]
+        end
+        
+        subgraph "VPC - Private Subnets - AZ1"
+            subgraph "ECS Cluster - AZ1"
+                Frontend1[ECS Task<br/>React Frontend<br/>Container]
+                Backend1[ECS Task<br/>Node.js Backend<br/>Container]
+                AI1[ECS Task<br/>AI Assistant Service<br/>Container]
+            end
+        end
+        
+        subgraph "VPC - Private Subnets - AZ2"
+            subgraph "ECS Cluster - AZ2"
+                Frontend2[ECS Task<br/>React Frontend<br/>Container]
+                Backend2[ECS Task<br/>Node.js Backend<br/>Container]
+                AI2[ECS Task<br/>AI Assistant Service<br/>Container]
+            end
+        end
+        
+        subgraph "Data Layer"
+            RDS[(Amazon RDS<br/>PostgreSQL<br/>Multi-AZ)]
+            ElastiCache[(Amazon ElastiCache<br/>Redis<br/>Multi-AZ)]
+            S3[(Amazon S3<br/>Document Storage<br/>Encrypted)]
+            ES[Amazon OpenSearch<br/>Elasticsearch<br/>Multi-AZ]
+        end
+        
+        subgraph "Security & Monitoring"
+            WAF[AWS WAF<br/>Web Application Firewall]
+            Secrets[AWS Secrets Manager<br/>API Keys & Credentials]
+            CloudWatch[Amazon CloudWatch<br/>Logs & Metrics]
+            GuardDuty[AWS GuardDuty<br/>Threat Detection]
+        end
+        
+        subgraph "External Services"
+            OpenAI[OpenAI API<br/>via NAT Gateway]
+            TranslateAPI[Google Cloud Translation<br/>via NAT Gateway]
+            GovBackend[Government Backend API<br/>via VPN/Direct Connect]
+        end
+    end
+    
+    subgraph "Backup & DR"
+        Backup[AWS Backup<br/>Automated Backups]
+        S3Glacier[S3 Glacier<br/>Long-term Archive]
+    end
+    
+    Users -->|HTTPS| CDN
+    CDN -->|HTTPS| WAF
+    WAF --> ALB
+    
+    ALB --> Frontend1
+    ALB --> Frontend2
+    ALB --> Backend1
+    ALB --> Backend2
+    
+    Frontend1 --> Backend1
+    Frontend2 --> Backend2
+    
+    Backend1 --> AI1
+    Backend2 --> AI2
+    
+    Backend1 --> RDS
+    Backend2 --> RDS
+    Backend1 --> ElastiCache
+    Backend2 --> ElastiCache
+    Backend1 --> S3
+    Backend2 --> S3
+    
+    AI1 --> ES
+    AI2 --> ES
+    AI1 --> RDS
+    AI2 --> RDS
+    
+    Backend1 --> Secrets
+    Backend2 --> Secrets
+    AI1 --> Secrets
+    AI2 --> Secrets
+    
+    AI1 -->|via NAT| OpenAI
+    AI2 -->|via NAT| OpenAI
+    Backend1 -->|via NAT| TranslateAPI
+    Backend2 -->|via NAT| TranslateAPI
+    
+    Backend1 -->|via VPN| GovBackend
+    Backend2 -->|via VPN| GovBackend
+    
+    Frontend1 --> CloudWatch
+    Frontend2 --> CloudWatch
+    Backend1 --> CloudWatch
+    Backend2 --> CloudWatch
+    AI1 --> CloudWatch
+    AI2 --> CloudWatch
+    
+    RDS --> Backup
+    S3 --> S3Glacier
+    
+    WAF -.->|Monitors| GuardDuty
+    ALB -.->|Monitors| GuardDuty
+    
+    style Users fill:#e1f5ff
+    style CDN fill:#ff9800
+    style ALB fill:#ff9800
+    style Frontend1 fill:#4caf50
+    style Frontend2 fill:#4caf50
+    style Backend1 fill:#2196f3
+    style Backend2 fill:#2196f3
+    style AI1 fill:#9c27b0
+    style AI2 fill:#9c27b0
+    style RDS fill:#f44336
+    style ElastiCache fill:#f44336
+    style S3 fill:#f44336
+    style ES fill:#f44336
+    style WAF fill:#ffc107
+    style Secrets fill:#ffc107
+    style CloudWatch fill:#ffc107

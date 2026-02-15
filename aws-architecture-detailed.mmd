@@ -1,0 +1,167 @@
+graph TB
+    subgraph "Edge Layer"
+        Route53[Amazon Route53<br/>DNS Management]
+        CloudFront[Amazon CloudFront<br/>- Global CDN<br/>- SSL/TLS Termination<br/>- DDoS Protection]
+        WAF[AWS WAF<br/>- SQL Injection Protection<br/>- XSS Protection<br/>- Rate Limiting]
+    end
+    
+    subgraph "AWS Region: ap-south-1 Mumbai"
+        subgraph "Availability Zone 1"
+            subgraph "Public Subnet AZ1"
+                ALB1[Application Load Balancer<br/>Target Group 1]
+                NAT1[NAT Gateway 1]
+            end
+            
+            subgraph "Private Subnet AZ1 - Compute"
+                ECS1[Amazon ECS Fargate<br/>Frontend Tasks]
+                ECS2[Amazon ECS Fargate<br/>Backend API Tasks]
+                ECS3[Amazon ECS Fargate<br/>AI Service Tasks]
+            end
+            
+            subgraph "Private Subnet AZ1 - Data"
+                RDS1[(RDS PostgreSQL<br/>Primary Instance)]
+                Redis1[(ElastiCache Redis<br/>Primary Node)]
+            end
+        end
+        
+        subgraph "Availability Zone 2"
+            subgraph "Public Subnet AZ2"
+                ALB2[Application Load Balancer<br/>Target Group 2]
+                NAT2[NAT Gateway 2]
+            end
+            
+            subgraph "Private Subnet AZ2 - Compute"
+                ECS4[Amazon ECS Fargate<br/>Frontend Tasks]
+                ECS5[Amazon ECS Fargate<br/>Backend API Tasks]
+                ECS6[Amazon ECS Fargate<br/>AI Service Tasks]
+            end
+            
+            subgraph "Private Subnet AZ2 - Data"
+                RDS2[(RDS PostgreSQL<br/>Standby Instance)]
+                Redis2[(ElastiCache Redis<br/>Replica Node)]
+            end
+        end
+        
+        subgraph "Shared Services"
+            S3Docs[S3 Bucket<br/>Documents<br/>- Versioning Enabled<br/>- Encryption at Rest]
+            S3Static[S3 Bucket<br/>Static Assets<br/>- Public Read<br/>- CloudFront Origin]
+            S3Backup[S3 Bucket<br/>Backups<br/>- Lifecycle Policies<br/>- Glacier Transition]
+            
+            OpenSearch[Amazon OpenSearch<br/>- 3 Master Nodes<br/>- 2 Data Nodes<br/>- Multi-AZ]
+            
+            ECR[Amazon ECR<br/>Container Registry<br/>- Frontend Image<br/>- Backend Image<br/>- AI Service Image]
+            
+            Secrets[AWS Secrets Manager<br/>- DB Credentials<br/>- API Keys<br/>- JWT Secrets]
+            
+            KMS[AWS KMS<br/>Encryption Keys<br/>- S3 Encryption<br/>- RDS Encryption<br/>- Secrets Encryption]
+        end
+        
+        subgraph "Monitoring & Security"
+            CloudWatch[Amazon CloudWatch<br/>- Logs<br/>- Metrics<br/>- Alarms<br/>- Dashboards]
+            
+            XRay[AWS X-Ray<br/>Distributed Tracing]
+            
+            GuardDuty[AWS GuardDuty<br/>Threat Detection]
+            
+            SecurityHub[AWS Security Hub<br/>Security Posture]
+            
+            IAM[AWS IAM<br/>- Roles<br/>- Policies<br/>- Service Accounts]
+        end
+        
+        subgraph "CI/CD Pipeline"
+            CodePipeline[AWS CodePipeline<br/>Deployment Pipeline]
+            CodeBuild[AWS CodeBuild<br/>Build & Test]
+            CodeDeploy[AWS CodeDeploy<br/>ECS Deployment]
+        end
+    end
+    
+    subgraph "External Integrations"
+        OpenAI[OpenAI API<br/>GPT-4]
+        GoogleTranslate[Google Cloud<br/>Translation API]
+        GovAPI[Government Backend<br/>Submission API]
+        SMS[SMS Gateway<br/>Twilio/AWS SNS]
+        Email[Email Service<br/>AWS SES]
+    end
+    
+    Route53 --> CloudFront
+    CloudFront --> WAF
+    WAF --> ALB1
+    WAF --> ALB2
+    
+    ALB1 --> ECS1
+    ALB1 --> ECS2
+    ALB2 --> ECS4
+    ALB2 --> ECS5
+    
+    ECS1 --> S3Static
+    ECS4 --> S3Static
+    
+    ECS2 --> ECS3
+    ECS5 --> ECS6
+    
+    ECS2 --> RDS1
+    ECS5 --> RDS1
+    ECS2 --> Redis1
+    ECS5 --> Redis1
+    ECS2 --> S3Docs
+    ECS5 --> S3Docs
+    
+    ECS3 --> OpenSearch
+    ECS6 --> OpenSearch
+    ECS3 --> RDS1
+    ECS6 --> RDS1
+    
+    RDS1 -.->|Replication| RDS2
+    Redis1 -.->|Replication| Redis2
+    
+    ECS2 --> Secrets
+    ECS5 --> Secrets
+    ECS3 --> Secrets
+    ECS6 --> Secrets
+    
+    S3Docs --> KMS
+    RDS1 --> KMS
+    Secrets --> KMS
+    
+    ECS3 -->|via NAT1| OpenAI
+    ECS6 -->|via NAT2| OpenAI
+    ECS2 -->|via NAT1| GoogleTranslate
+    ECS5 -->|via NAT2| GoogleTranslate
+    
+    ECS2 -->|VPN/Direct Connect| GovAPI
+    ECS5 -->|VPN/Direct Connect| GovAPI
+    
+    ECS2 --> SMS
+    ECS5 --> SMS
+    ECS2 --> Email
+    ECS5 --> Email
+    
+    ECS1 --> CloudWatch
+    ECS2 --> CloudWatch
+    ECS3 --> CloudWatch
+    ECS4 --> CloudWatch
+    ECS5 --> CloudWatch
+    ECS6 --> CloudWatch
+    
+    ECS2 --> XRay
+    ECS5 --> XRay
+    
+    RDS1 --> CloudWatch
+    Redis1 --> CloudWatch
+    OpenSearch --> CloudWatch
+    
+    GuardDuty --> SecurityHub
+    CloudWatch --> SecurityHub
+    
+    CodePipeline --> CodeBuild
+    CodeBuild --> ECR
+    CodePipeline --> CodeDeploy
+    CodeDeploy --> ECS2
+    CodeDeploy --> ECS5
+    
+    RDS1 --> S3Backup
+    
+    IAM -.->|Manages| ECS2
+    IAM -.->|Manages| ECS5
+    IAM -.->|Manages| ECS3
+    IAM -.->|Manages| ECS6
