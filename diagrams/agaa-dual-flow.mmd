@@ -1,0 +1,52 @@
+graph TB
+    Users[👥 Users]
+    
+    subgraph "Frontend - S3 Static Website"
+        Frontend[📦 S3: agaa-frontend-1772860549<br/>index.html + app-v2-new.js + styles.css]
+    end
+    
+    subgraph "🎓 Scholarship Flow - AWS Backend"
+        API1[🌐 API Gateway]
+        Lambda1[⚡ Lambda: process-user-input]
+        Lambda2[⚡ Lambda: generate-form]
+        Lambda3[⚡ Lambda: submit-application]
+        Bedrock1[🤖 AWS Bedrock<br/>Claude 3 Haiku]
+        DynamoDB1[(🗄️ DynamoDB<br/>agaa-applications)]
+        S3Docs1[📄 S3: agaa-docs-ak-1772860173]
+    end
+    
+    subgraph "🌾 Farmer Welfare Flow - Client-Side Only"
+        ClientJS[💻 JavaScript<br/>Client-Side Processing<br/>- Pre-defined schemes<br/>- Form templates<br/>- No AI processing<br/>- No backend calls]
+    end
+    
+    Users -->|HTTPS| Frontend
+    
+    Frontend -->|Scholarship:<br/>REST API Calls| API1
+    Frontend -->|Farmer:<br/>Pure Client-Side| ClientJS
+    
+    API1 --> Lambda1
+    API1 --> Lambda2
+    API1 --> Lambda3
+    
+    Lambda1 --> Bedrock1
+    Lambda2 --> Bedrock1
+    Lambda3 --> Bedrock1
+    
+    Lambda1 --> DynamoDB1
+    Lambda2 --> DynamoDB1
+    Lambda3 --> DynamoDB1
+    
+    Lambda3 --> S3Docs1
+    
+    ClientJS -.->|No Backend| Frontend
+    
+    style Users fill:#e1f5ff,stroke:#0288d1,stroke-width:3px
+    style Frontend fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style API1 fill:#4caf50,stroke:#2e7d32,stroke-width:2px
+    style Lambda1 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda2 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda3 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Bedrock1 fill:#9c27b0,stroke:#6a1b9a,stroke-width:2px
+    style DynamoDB1 fill:#f44336,stroke:#c62828,stroke-width:2px
+    style S3Docs1 fill:#ff9800,stroke:#e65100,stroke-width:2px
+    style ClientJS fill:#00bcd4,stroke:#006064,stroke-width:3px

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGAA Prototype - AWS Architecture Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .team-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .diagram-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .diagram-section h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .diagram-section p {
+            color: #4a5568;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .mermaid {
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+        
+        .info-box {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .info-box h3 {
+            color: #234e52;
+            margin-bottom: 10px;
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+            color: #2c7a7b;
+        }
+        
+        .info-box li {
+            margin: 5px 0;
+        }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .specs-table th,
+        .specs-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .specs-table th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .specs-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .diagram-section {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇮🇳 AGAA Prototype</h1>
+            <p>AWS Architecture Diagrams</p>
+            <div class="team-info">
+                <p><strong>Team A3I</strong> (Arunkumar, Aditya & Artificial Intelligence)</p>
+                <p>AI for Bharat Hackathon 2026</p>
+            </div>
+        </div>
+
+        <!-- Dual Flow Architecture -->
+        <div class="diagram-section">
+            <h2>🔄 Dual Flow Architecture - Both Use Cases</h2>
+            <p>Shows both Scholarship (AWS Backend) and Farmer Welfare (Client-Side) flows in the AGAA prototype.</p>
+            
+            <div class="info-box">
+                <h3>⚠️ Important: Two Different Flows</h3>
+                <ul>
+                    <li><strong>🎓 Scholarship Flow:</strong> Uses AWS Backend (API Gateway + Lambda + Bedrock + DynamoDB + S3)</li>
+                    <li><strong>🌾 Farmer Welfare Flow:</strong> Pure client-side JavaScript (no backend calls, no AI processing)</li>
+                </ul>
+            </div>
+            
+            <div class="mermaid">
+graph TB
+    Users[👥 Users]
+    
+    subgraph "Frontend - S3 Static Website"
+        Frontend[📦 S3: agaa-frontend-1772860549<br/>index.html + app-v2-new.js + styles.css]
+    end
+    
+    subgraph "🎓 Scholarship Flow - AWS Backend"
+        API1[🌐 API Gateway]
+        Lambda1[⚡ Lambda: process-user-input]
+        Lambda2[⚡ Lambda: generate-form]
+        Lambda3[⚡ Lambda: submit-application]
+        Bedrock1[🤖 AWS Bedrock<br/>Claude 3 Haiku]
+        DynamoDB1[(🗄️ DynamoDB<br/>agaa-applications)]
+        S3Docs1[📄 S3: agaa-docs-ak-1772860173]
+    end
+    
+    subgraph "🌾 Farmer Welfare Flow - Client-Side Only"
+        ClientJS[💻 JavaScript<br/>Client-Side Processing<br/>- Pre-defined schemes<br/>- Form templates<br/>- No AI processing<br/>- No backend calls]
+    end
+    
+    Users -->|HTTPS| Frontend
+    
+    Frontend -->|Scholarship:<br/>REST API Calls| API1
+    Frontend -->|Farmer:<br/>Pure Client-Side| ClientJS
+    
+    API1 --> Lambda1
+    API1 --> Lambda2
+    API1 --> Lambda3
+    
+    Lambda1 --> Bedrock1
+    Lambda2 --> Bedrock1
+    Lambda3 --> Bedrock1
+    
+    Lambda1 --> DynamoDB1
+    Lambda2 --> DynamoDB1
+    Lambda3 --> DynamoDB1
+    
+    Lambda3 --> S3Docs1
+    
+    ClientJS -.->|No Backend| Frontend
+    
+    style Users fill:#e1f5ff,stroke:#0288d1,stroke-width:3px
+    style Frontend fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style API1 fill:#4caf50,stroke:#2e7d32,stroke-width:2px
+    style Lambda1 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda2 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda3 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Bedrock1 fill:#9c27b0,stroke:#6a1b9a,stroke-width:2px
+    style DynamoDB1 fill:#f44336,stroke:#c62828,stroke-width:2px
+    style S3Docs1 fill:#ff9800,stroke:#e65100,stroke-width:2px
+    style ClientJS fill:#00bcd4,stroke:#006064,stroke-width:3px
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="downloadDiagram('dual')">📥 Download PNG</button>
+                <button class="btn btn-secondary" onclick="copyMermaidCode('dual')">📋 Copy Mermaid Code</button>
+            </div>
+        </div>
+
+        <!-- Simple Architecture -->
+        <div class="diagram-section">
+            <h2>📊 Simple Architecture Overview</h2>
+            <p>High-level view of the AGAA prototype serverless architecture on AWS (Scholarship flow only).</p>
+            
+            <div class="mermaid">
+graph LR
+    A[👥 Users] -->|HTTPS| B[📦 S3 Static Website<br/>Frontend]
+    B -->|REST API| C[🌐 API Gateway]
+    C -->|Trigger| D[⚡ Lambda Functions<br/>3 Functions]
+    D -->|AI Processing| E[🤖 AWS Bedrock<br/>Claude 3 Haiku]
+    D -->|Store Data| F[🗄️ DynamoDB]
+    D -->|Save Documents| G[📄 S3 Bucket<br/>Documents]
+    
+    style A fill:#e1f5ff,stroke:#0288d1,stroke-width:3px
+    style B fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style C fill:#4caf50,stroke:#2e7d32,stroke-width:3px
+    style D fill:#ffc107,stroke:#f57c00,stroke-width:3px
+    style E fill:#9c27b0,stroke:#6a1b9a,stroke-width:3px
+    style F fill:#f44336,stroke:#c62828,stroke-width:3px
+    style G fill:#ff9800,stroke:#e65100,stroke-width:3px
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="downloadDiagram('simple')">📥 Download PNG</button>
+                <button class="btn btn-secondary" onclick="copyMermaidCode('simple')">📋 Copy Mermaid Code</button>
+            </div>
+        </div>
+
+        <!-- Detailed Architecture -->
+        <div class="diagram-section">
+            <h2>🏗️ Detailed Architecture</h2>
+            <p>Complete architecture showing all AWS services, Lambda functions, and data flow in the AGAA prototype.</p>
+            
+            <div class="mermaid">
+graph TB
+    subgraph "User Layer"
+        Users[👥 Users<br/>Mobile & Desktop Browsers]
+    end
+    
+    subgraph "AWS Region: us-east-1"
+        subgraph "Frontend Layer"
+            S3Frontend[📦 S3 Static Website<br/>agaa-frontend-1772860549<br/>- index.html<br/>- app-v2-new.js<br/>- styles.css]
+        end
+        
+        subgraph "API Layer"
+            APIGateway[🌐 API Gateway<br/>REST API<br/>phxb8mfmqk.execute-api.us-east-1.amazonaws.com/prod<br/>- CORS Enabled<br/>- HTTPS Only]
+        end
+        
+        subgraph "Compute Layer - AWS Lambda"
+            Lambda1[⚡ Lambda Function<br/>process-user-input<br/>- Node.js 20.x<br/>- 512 MB Memory<br/>- 30s Timeout]
+            
+            Lambda2[⚡ Lambda Function<br/>generate-form<br/>- Node.js 20.x<br/>- 512 MB Memory<br/>- 30s Timeout]
+            
+            Lambda3[⚡ Lambda Function<br/>submit-application<br/>- Node.js 20.x<br/>- 512 MB Memory<br/>- 30s Timeout]
+        end
+        
+        subgraph "AI Layer"
+            Bedrock[🤖 AWS Bedrock<br/>Claude 3 Haiku<br/>anthropic.claude-3-haiku-20240307-v1:0<br/>- Multi-language Support<br/>- Form Generation<br/>- Eligibility Analysis]
+        end
+        
+        subgraph "Data Layer"
+            DynamoDB[(🗄️ DynamoDB<br/>agaa-applications<br/>- Session Data<br/>- Application Records<br/>- On-Demand Billing)]
+            
+            S3Docs[📄 S3 Bucket<br/>agaa-docs-ak-1772860173<br/>- Generated HTML Forms<br/>- Application Documents<br/>- Versioning Enabled]
+        end
+        
+        subgraph "Security & Monitoring"
+            IAM[🔐 IAM Roles<br/>- Lambda Execution Role<br/>- Bedrock Access<br/>- S3 Access<br/>- DynamoDB Access]
+            
+            CloudWatch[📊 CloudWatch<br/>- Lambda Logs<br/>- API Gateway Logs<br/>- Metrics & Alarms]
+        end
+    end
+    
+    Users -->|HTTPS| S3Frontend
+    S3Frontend -->|API Calls| APIGateway
+    
+    APIGateway -->|POST /process-input| Lambda1
+    APIGateway -->|POST /generate-form| Lambda2
+    APIGateway -->|POST /submit| Lambda3
+    
+    Lambda1 -->|Invoke Model| Bedrock
+    Lambda2 -->|Invoke Model| Bedrock
+    Lambda3 -->|Invoke Model| Bedrock
+    
+    Lambda1 -->|Store Session| DynamoDB
+    Lambda2 -->|Read Session| DynamoDB
+    Lambda3 -->|Store Application| DynamoDB
+    
+    Lambda3 -->|Upload HTML| S3Docs
+    Lambda3 -->|Generate Download URL| S3Docs
+    
+    IAM -.->|Authorize| Lambda1
+    IAM -.->|Authorize| Lambda2
+    IAM -.->|Authorize| Lambda3
+    
+    Lambda1 -->|Logs| CloudWatch
+    Lambda2 -->|Logs| CloudWatch
+    Lambda3 -->|Logs| CloudWatch
+    APIGateway -->|Logs| CloudWatch
+    
+    style Users fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style S3Frontend fill:#ff9800,stroke:#e65100,stroke-width:2px
+    style APIGateway fill:#4caf50,stroke:#2e7d32,stroke-width:2px
+    style Lambda1 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda2 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda3 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Bedrock fill:#9c27b0,stroke:#6a1b9a,stroke-width:2px
+    style DynamoDB fill:#f44336,stroke:#c62828,stroke-width:2px
+    style S3Docs fill:#ff9800,stroke:#e65100,stroke-width:2px
+    style IAM fill:#607d8b,stroke:#37474f,stroke-width:2px
+    style CloudWatch fill:#2196f3,stroke:#1565c0,stroke-width:2px
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="downloadDiagram('detailed')">📥 Download PNG</button>
+                <button class="btn btn-secondary" onclick="copyMermaidCode('detailed')">📋 Copy Mermaid Code</button>
+            </div>
+        </div>
+
+        <!-- Architecture Specifications -->
+        <div class="diagram-section">
+            <h2>📋 Architecture Specifications</h2>
+            
+            <div class="info-box">
+                <h3>🎯 Key Features</h3>
+                <ul>
+                    <li><strong>Serverless Architecture:</strong> No server management, auto-scaling</li>
+                    <li><strong>Cost-Effective:</strong> Pay only for what you use (~$0.0018 per transaction)</li>
+                    <li><strong>Highly Available:</strong> 99.9% uptime with AWS managed services</li>
+                    <li><strong>Secure:</strong> IAM roles, HTTPS, encrypted storage</li>
+                    <li><strong>Scalable:</strong> Handles 1000+ concurrent users</li>
+                </ul>
+            </div>
+            
+            <h3>AWS Services Used</h3>
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Purpose</th>
+                        <th>Configuration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>S3 Static Website</strong></td>
+                        <td>Frontend Hosting</td>
+                        <td>agaa-frontend-1772860549</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API Gateway</strong></td>
+                        <td>REST API Endpoint</td>
+                        <td>phxb8mfmqk.execute-api.us-east-1.amazonaws.com/prod</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lambda Functions</strong></td>
+                        <td>Backend Logic</td>
+                        <td>3 functions, Node.js 20.x, 512 MB, 30s timeout</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AWS Bedrock</strong></td>
+                        <td>AI Processing</td>
+                        <td>Claude 3 Haiku (anthropic.claude-3-haiku-20240307-v1:0)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DynamoDB</strong></td>
+                        <td>Database</td>
+                        <td>agaa-applications (On-Demand)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>S3 Bucket</strong></td>
+                        <td>Document Storage</td>
+                        <td>agaa-docs-ak-1772860173</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CloudWatch</strong></td>
+                        <td>Monitoring & Logs</td>
+                        <td>Lambda logs, API Gateway logs, metrics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IAM</strong></td>
+                        <td>Security & Access</td>
+                        <td>Lambda execution roles, service permissions</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Lambda Functions</h3>
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Endpoint</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>process-user-input</strong></td>
+                        <td>POST /process-input</td>
+                        <td>Process user eligibility, analyze requirements</td>
+                    </tr>
+                    <tr>
+                        <td><strong>generate-form</strong></td>
+                        <td>POST /generate-form</td>
+                        <td>Generate application form using AI</td>
+                    </tr>
+                    <tr>
+                        <td><strong>submit-application</strong></td>
+                        <td>POST /submit</td>
+                        <td>Submit application, generate PDF, store in S3</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="info-box">
+                <h3>🌍 Live Deployment</h3>
+                <ul>
+                    <li><strong>Frontend URL:</strong> <a href="http://agaa-frontend-1772860549.s3-website-us-east-1.amazonaws.com" target="_blank">http://agaa-frontend-1772860549.s3-website-us-east-1.amazonaws.com</a></li>
+                    <li><strong>API Endpoint:</strong> https://phxb8mfmqk.execute-api.us-east-1.amazonaws.com/prod</li>
+                    <li><strong>Region:</strong> us-east-1 (N. Virginia)</li>
+                    <li><strong>AWS Account:</strong> 469072181254</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        function downloadDiagram(type) {
+            alert('To download as PNG:\n\n1. Right-click on the diagram\n2. Select "Save image as..."\n3. Choose your location and save\n\nAlternatively, use the Mermaid Live Editor:\n1. Click "Copy Mermaid Code"\n2. Visit https://mermaid.live\n3. Paste the code\n4. Click "Download PNG" or "Download SVG"');
+        }
+
+        function copyMermaidCode(type) {
+            const mermaidElements = document.querySelectorAll('.mermaid');
+            let code = '';
+            
+            if (type === 'dual') {
+                code = mermaidElements[0].textContent.trim();
+            } else if (type === 'simple') {
+                code = mermaidElements[1].textContent.trim();
+            } else if (type === 'detailed') {
+                code = mermaidElements[2].textContent.trim();
+            }
+            
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Mermaid code copied to clipboard!\n\nYou can now:\n1. Visit https://mermaid.live\n2. Paste the code\n3. Download as PNG or SVG');
+            }).catch(err => {
+                alert('❌ Failed to copy code. Please select and copy manually.');
+            });
+        }
+    </script>
+</body>
+</html>

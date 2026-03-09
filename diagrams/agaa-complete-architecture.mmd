@@ -1,0 +1,79 @@
+graph TB
+    subgraph "User Layer"
+        Users[👥 Users<br/>Mobile & Desktop Browsers]
+    end
+    
+    subgraph "AWS Region: us-east-1"
+        subgraph "Frontend Layer"
+            S3Frontend[📦 S3 Static Website<br/>agaa-frontend-1772860549<br/>- index.html<br/>- app-v2-new.js<br/>- styles.css<br/><br/>🎓 Scholarship Flow: AWS Backend<br/>🌾 Farmer Flow: Client-Side Only]
+        end
+        
+        subgraph "API Layer - Scholarship Only"
+            APIGateway[🌐 API Gateway<br/>REST API<br/>phxb8mfmqk.execute-api.us-east-1.amazonaws.com/prod<br/>- CORS Enabled<br/>- HTTPS Only<br/><br/>⚠️ Used for Scholarship flow only]
+        end
+        
+        subgraph "Compute Layer - AWS Lambda - Scholarship Only"
+            Lambda1[⚡ Lambda Function<br/>process-user-input<br/>- Node.js 20.x<br/>- 512 MB Memory<br/>- 30s Timeout<br/>- Eligibility Analysis]
+            
+            Lambda2[⚡ Lambda Function<br/>generate-form<br/>- Node.js 20.x<br/>- 512 MB Memory<br/>- 30s Timeout<br/>- AI Form Generation]
+            
+            Lambda3[⚡ Lambda Function<br/>submit-application<br/>- Node.js 20.x<br/>- 512 MB Memory<br/>- 30s Timeout<br/>- PDF Generation & Storage]
+        end
+        
+        subgraph "AI Layer - Scholarship Only"
+            Bedrock[🤖 AWS Bedrock<br/>Claude 3 Haiku<br/>anthropic.claude-3-haiku-20240307-v1:0<br/>- Multi-language Support<br/>- Form Generation<br/>- Eligibility Analysis<br/><br/>⚠️ Used for Scholarship flow only]
+        end
+        
+        subgraph "Data Layer - Scholarship Only"
+            DynamoDB[(🗄️ DynamoDB<br/>agaa-applications<br/>- Session Data<br/>- Application Records<br/>- On-Demand Billing<br/><br/>⚠️ Used for Scholarship flow only)]
+            
+            S3Docs[📄 S3 Bucket<br/>agaa-docs-ak-1772860173<br/>- Generated HTML Forms<br/>- Application Documents<br/>- Versioning Enabled<br/><br/>⚠️ Used for Scholarship flow only]
+        end
+        
+        subgraph "Security & Monitoring"
+            IAM[🔐 IAM Roles<br/>- Lambda Execution Role<br/>- Bedrock Access<br/>- S3 Access<br/>- DynamoDB Access]
+            
+            CloudWatch[📊 CloudWatch<br/>- Lambda Logs<br/>- API Gateway Logs<br/>- Metrics & Alarms]
+        end
+    end
+    
+    Users -->|HTTPS| S3Frontend
+    
+    S3Frontend -->|🎓 Scholarship Flow<br/>API Calls| APIGateway
+    S3Frontend -.->|🌾 Farmer Flow<br/>Client-Side Only<br/>No Backend Calls| S3Frontend
+    
+    APIGateway -->|POST /process-input| Lambda1
+    APIGateway -->|POST /generate-form| Lambda2
+    APIGateway -->|POST /submit| Lambda3
+    
+    Lambda1 -->|Invoke Model| Bedrock
+    Lambda2 -->|Invoke Model| Bedrock
+    Lambda3 -->|Invoke Model| Bedrock
+    
+    Lambda1 -->|Store Session| DynamoDB
+    Lambda2 -->|Read Session| DynamoDB
+    Lambda3 -->|Store Application| DynamoDB
+    
+    Lambda3 -->|Upload HTML| S3Docs
+    Lambda3 -->|Generate Download URL| S3Docs
+    
+    IAM -.->|Authorize| Lambda1
+    IAM -.->|Authorize| Lambda2
+    IAM -.->|Authorize| Lambda3
+    
+    Lambda1 -->|Logs| CloudWatch
+    Lambda2 -->|Logs| CloudWatch
+    Lambda3 -->|Logs| CloudWatch
+    APIGateway -->|Logs| CloudWatch
+    
+    style Users fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style S3Frontend fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style APIGateway fill:#4caf50,stroke:#2e7d32,stroke-width:2px
+    style Lambda1 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda2 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Lambda3 fill:#ffc107,stroke:#f57c00,stroke-width:2px
+    style Bedrock fill:#9c27b0,stroke:#6a1b9a,stroke-width:2px
+    style DynamoDB fill:#f44336,stroke:#c62828,stroke-width:2px
+    style S3Docs fill:#ff9800,stroke:#e65100,stroke-width:2px
+    style IAM fill:#607d8b,stroke:#37474f,stroke-width:2px
+    style CloudWatch fill:#2196f3,stroke:#1565c0,stroke-width:2px
