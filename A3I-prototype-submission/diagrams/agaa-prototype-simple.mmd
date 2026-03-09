@@ -1,0 +1,15 @@
+graph LR
+    A[👥 Users] -->|HTTPS| B[📦 S3 Static Website<br/>Frontend]
+    B -->|REST API| C[🌐 API Gateway]
+    C -->|Trigger| D[⚡ Lambda Functions<br/>3 Functions]
+    D -->|AI Processing| E[🤖 AWS Bedrock<br/>Claude 3 Haiku]
+    D -->|Store Data| F[🗄️ DynamoDB]
+    D -->|Save Documents| G[📄 S3 Bucket<br/>Documents]
+    
+    style A fill:#e1f5ff,stroke:#0288d1,stroke-width:3px
+    style B fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style C fill:#4caf50,stroke:#2e7d32,stroke-width:3px
+    style D fill:#ffc107,stroke:#f57c00,stroke-width:3px
+    style E fill:#9c27b0,stroke:#6a1b9a,stroke-width:3px
+    style F fill:#f44336,stroke:#c62828,stroke-width:3px
+    style G fill:#ff9800,stroke:#e65100,stroke-width:3px

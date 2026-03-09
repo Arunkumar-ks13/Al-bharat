@@ -1,0 +1,9 @@
+{
+  "name": "agaa-validate-field",
+  "version": "1.0.0",
+  "description": "AGAA Intelligent Field Validation with AWS Bedrock",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.515.0"
+  }
+}

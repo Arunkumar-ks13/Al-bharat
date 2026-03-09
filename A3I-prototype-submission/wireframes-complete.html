@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGAA - Wireframes & User Flow</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #a8e6cf 0%, #7ed6a8 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 40px; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .team-info { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 20px; }
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
+        .nav-tab {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .nav-tab:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        .nav-tab.active { background: white; color: #5cb85c; border-color: white; }
+        .screen { display: none; background: white; border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .screen.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .screen h2 { color: #2d3748; margin-bottom: 20px; font-size: 1.8rem; }
+        .screen p { color: #4a5568; margin-bottom: 20px; line-height: 1.6; }
+        .mockup {
+            background: #f7fafc;
+            border: 3px solid #5cb85c;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 2;
+            white-space: pre-wrap;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .info-box { background: #e6fffa; border-left: 4px solid #5cb85c; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .info-box h3 { color: #234e52; margin-bottom: 10px; }
+        .info-box ul { margin-left: 20px; color: #2c7a7b; }
+        .flow-diagram { text-align: center; margin: 30px 0; }
+        .flow-step {
+            display: inline-block;
+            background: #5cb85c;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 10px;
+            font-weight: 600;
+        }
+        .flow-arrow { display: inline-block; color: #5cb85c; font-size: 2rem; margin: 0 10px; }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: #5cb85c;
+            color: white;
+            margin: 10px 5px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(92, 184, 92, 0.4); }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .screen { padding: 20px; }
+            .mockup { padding: 20px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇮🇳 AGAA Prototype</h1>
+            <p>Wireframes & User Flow Documentation</p>
+            <div class="team-info">
+                <p><strong>Team A3I</strong> (Arunkumar, Aditya & Artificial Intelligence)</p>
+                <p>AI for Bharat Hackathon 2026</p>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showScreen('overview')">📊 Overview</button>
+            <button class="nav-tab" onclick="showScreen('screen1')">1. Home</button>
+            <button class="nav-tab" onclick="showScreen('screen2')">2. Describe</button>
+            <button class="nav-tab" onclick="showScreen('screen3')">3. Eligibility</button>
+            <button class="nav-tab" onclick="showScreen('screen4')">4. Schemes</button>
+            <button class="nav-tab" onclick="showScreen('screen5')">5. Form Review</button>
+            <button class="nav-tab" onclick="showScreen('screen6')">6. Confirmation</button>
+        </div>
+
+        <!-- Overview -->
+        <div id="overview" class="screen active">
+            <h2>📊 User Flow Overview</h2>
+            <p>The AGAA prototype follows a simple, intuitive 6-screen flow designed for ease of use.</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-step">1. Home</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">2. Describe</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">3. Eligibility</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">4. Schemes</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">5. Form Review</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">6. Confirmation</div>
+            </div>
+
+            <div class="info-box">
+                <h3>🎯 Design Principles</h3>
+                <ul>
+                    <li><strong>Mobile-First:</strong> Optimized for mobile devices (320px+)</li>
+                    <li><strong>Simple:</strong> Minimal cognitive load for all users</li>
+                    <li><strong>Visual:</strong> Icons and colors for better understanding</li>
+                    <li><strong>Progressive:</strong> Step-by-step guidance</li>
+                    <li><strong>Accessible:</strong> WCAG 2.1 AA compliant design</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>🎨 Color Palette</h3>
+                <ul>
+                    <li><strong>Primary:</strong> #a8e6cf (Pista Green - Growth, Development)</li>
+                    <li><strong>Secondary:</strong> #7ed6a8 (Dark Green - Success, Progress)</li>
+                    <li><strong>Accent:</strong> #5cb85c (Action Green)</li>
+                    <li><strong>Background:</strong> #F5F5F5 (Light Gray)</li>
+                    <li><strong>Text:</strong> #2d3748 (Dark Gray)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>✨ Key Features</h3>
+                <ul>
+                    <li>Multi-language support (English, Hindi, Tamil)</li>
+                    <li>Dual use cases (Scholarship & Farmer Welfare)</li>
+                    <li>AI-powered form generation (Scholarship flow)</li>
+                    <li>Client-side processing (Farmer flow)</li>
+                    <li>Responsive design for all devices</li>
+                    <li>Progress indicators throughout the journey</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showScreen('screen1')">View Screen 1: Home →</button>
+        </div>
+
+        <!-- Screen 1: Home -->
+        <div id="screen1" class="screen">
+            <h2>Screen 1: Home / Landing Page</h2>
+            <p>The entry point where users select their language and begin their journey.</p>
+
+            <div class="mockup">┌─────────────────────────────────────┐
+│  🇮🇳 AGAA                           │
+│  AI Government Application Assistant│
+├─────────────────────────────────────┤
+│                                     │
+│         🚀                           │
+│                                     │
+│    Welcome to AGAA                  │
+│                                     │
+│    Get help filling government      │
+│    forms with AI assistance         │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │ 🌐 Select Language            │ │
+│  │                               │ │
+│  │ [English] [हिंदी] [தமிழ்]    │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │  [Get Started →]              │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ✓ Simple & Fast                   │
+│  ✓ AI-Powered                      │
+│  ✓ Secure & Private                │
+│                                     │
+└─────────────────────────────────────┘</div>
+
+            <div class="info-box">
+                <h3>Key Elements</h3>
+                <ul>
+                    <li>Clear branding with Indian flag emoji</li>
+                    <li>Rocket icon representing e-governance empowerment</li>
+                    <li>Language selection upfront (3 languages)</li>
+                    <li>Large, prominent "Get Started" button</li>
+                    <li>Trust indicators (Simple, AI-Powered, Secure)</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showScreen('screen2')">Next: Screen 2 →</button>
+        </div>
+
+        <!-- Screen 2: Describe Situation -->
+        <div id="screen2" class="screen">
+            <h2>Screen 2: Describe Your Situation</h2>
+            <p>Users describe what they need help with, and the system routes them to the appropriate flow.</p>
+
+            <div class="mockup">┌─────────────────────────────────────┐
+│  [← Back]  AGAA          [हिंदी ▼] │
+├─────────────────────────────────────┤
+│  Progress: [██░░░░░░░░] 10%        │
+│                                     │
+│  Tell Us What You Need              │
+│                                     │
+│  What brings you here today?        │
+│  ┌───────────────────────────────┐ │
+│  │ I need a scholarship for      │ │
+│  │ engineering studies           │ │
+│  │                               │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ✅ We can help with:               │
+│  🎓 Education Scholarships          │
+│  🌾 Farmer Welfare Schemes          │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │  [Continue →]                 │ │
+│  └───────────────────────────────┘ │
+│                                     │
+└─────────────────────────────────────┘</div>
+
+            <div class="info-box">
+                <h3>Key Elements</h3>
+                <ul>
+                    <li>Progress bar showing 10% completion</li>
+                    <li>Free-text input for describing situation</li>
+                    <li>Clear indication of supported use cases</li>
+                    <li>Keyword detection routes to appropriate flow</li>
+                    <li>Back button for navigation</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showScreen('screen3')">Next: Screen 3 →</button>
+        </div>
+
+        <!-- Screen 3: Eligibility Questions -->
+        <div id="screen3" class="screen">
+            <h2>Screen 3: Eligibility Check (Scholarship Flow)</h2>
+            <p>10 questions to determine eligibility for scholarship schemes.</p>
+
+            <div class="mockup">┌─────────────────────────────────────┐
+│  [← Back]  AGAA          [हिंदी ▼] │
+├─────────────────────────────────────┤
+│  Progress: [████░░░░░░] 20%        │
+│                                     │
+│  Eligibility Check                  │
+│                                     │
+│  1. Education level?                │
+│  ┌───────────────────────────────┐ │
+│  │ [Undergraduate (UG)        ▼] │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  2. What are you going to study?    │
+│  ┌───────────────────────────────┐ │
+│  │ Engineering                   │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  3. Family annual income?           │
+│  ┌───────────────────────────────┐ │
+│  │ 250000                        │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ... (7 more questions)             │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │  [Check Eligibility →]        │ │
+│  └───────────────────────────────┘ │
+│                                     │
+└─────────────────────────────────────┘</div>
+
+            <div class="info-box">
+                <h3>Questions Asked</h3>
+                <ul>
+                    <li>Current education level</li>
+                    <li>Field of study</li>
+                    <li>Family annual income</li>
+                    <li>Father's occupation</li>
+                    <li>Mother's occupation</li>
+                    <li>Person with disability (Yes/No)</li>
+                    <li>Girl child (Yes/No)</li>
+                    <li>First graduate in family (Yes/No)</li>
+                    <li>Expected scholarship amount</li>
+                    <li>Educational loan consideration</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showScreen('screen4')">Next: Screen 4 →</button>
+        </div>
+
+        <!-- Screen 4: Recommended Schemes -->
+        <div id="screen4" class="screen">
+            <h2>Screen 4: Recommended Schemes</h2>
+            <p>AI analyzes eligibility and recommends matching schemes.</p>
+
+            <div class="mockup">┌─────────────────────────────────────┐
+│  [← Back]  AGAA          [हिंदी ▼] │
+├─────────────────────────────────────┤
+│  Progress: [██████░░░░] 50%        │
+│                                     │
+│  Recommended Schemes                │
+│                                     │
+│  ✅ You are eligible for 3 schemes  │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │ ⭐ Girl Child Empowerment     │ │
+│  │    Scholarship                │ │
+│  │    For: UG - Engineering      │ │
+│  │    Income: ₹2,50,000          │ │
+│  │    ✓ Priority Scholarship     │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │ 📋 Pradhan Mantri Scholarship │ │
+│  │    For: UG - Engineering      │ │
+│  │    Income: ₹2,50,000          │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │  [Generate Form →]            │ │
+│  └───────────────────────────────┘ │
+│                                     │
+└─────────────────────────────────────┘</div>
+
+            <div class="info-box">
+                <h3>Scheme Categories</h3>
+                <ul>
+                    <li><strong>Priority 1:</strong> Special category (Disabled, Girl Child, First Graduate)</li>
+                    <li><strong>Priority 2:</strong> National & State scholarships</li>
+                    <li><strong>Priority 3:</strong> General education scholarships</li>
+                    <li><strong>Total:</strong> 11 scholarship schemes available</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showScreen('screen5')">Next: Screen 5 →</button>
+        </div>
+
+        <!-- Screen 5: Form Review -->
+        <div id="screen5" class="screen">
+            <h2>Screen 5: Review Your Application</h2>
+            <p>AI-generated form with all fields pre-filled for review.</p>
+
+            <div class="mockup">┌─────────────────────────────────────┐
+│  [← Back]  AGAA          [हिंदी ▼] │
+├─────────────────────────────────────┤
+│  Progress: [████████░░] 75%        │
+│                                     │
+│  Review Your Application            │
+│                                     │
+│  AI has filled the form based on    │
+│  your input. Please review.         │
+│                                     │
+│  Full Name                          │
+│  ┌───────────────────────────────┐ │
+│  │ [Your Name]                   │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  Date of Birth                      │
+│  ┌───────────────────────────────┐ │
+│  │ [DD/MM/YYYY]                  │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  ... (more fields)                  │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │  [Review for Submission →]    │ │
+│  └───────────────────────────────┘ │
+│                                     │
+└─────────────────────────────────────┘</div>
+
+            <div class="info-box">
+                <h3>Form Fields</h3>
+                <ul>
+                    <li>Personal information (Name, DOB, Gender)</li>
+                    <li>Contact details (Mobile, Email, Address)</li>
+                    <li>Family information (Father/Mother occupation, Income)</li>
+                    <li>Educational details (Institution, Course, Year)</li>
+                    <li>Bank details (Account number, IFSC code)</li>
+                    <li>All fields editable before submission</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showScreen('screen6')">Next: Screen 6 →</button>
+        </div>
+
+        <!-- Screen 6: Confirmation -->
+        <div id="screen6" class="screen">
+            <h2>Screen 6: Confirmation Page</h2>
+            <p>Success confirmation with application ID and next steps.</p>
+
+            <div class="mockup">┌─────────────────────────────────────┐
+│         AGAA - Success!             │
+├─────────────────────────────────────┤
+│                                     │
+│              ✓                      │
+│                                     │
+│  Application Form Filled!           │
+│                                     │
+│  Your application is ready for      │
+│  submission                         │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │ Application ID:               │ │
+│  │ APP-2026-001234               │ │
+│  │                               │ │
+│  │ Status: Filled - Ready        │ │
+│  │                               │ │
+│  │ [Download Application (PDF)]  │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  📋 How to Submit:                  │
+│  • Online: Visit portal            │
+│  • Offline: Print & submit         │
+│                                     │
+│  ⏱️ Next Steps & Support:           │
+│  • Processing: 6 weeks             │
+│  • Phone: +91-XXXX-XXX-123         │
+│  • Email: support@xxx.gov.in       │
+│                                     │
+│  ┌───────────────────────────────┐ │
+│  │  [Fill Another Application]   │ │
+│  └───────────────────────────────┘ │
+│                                     │
+│  Team A3I                           │
+│  (Arun, Aditya & AI)                │
+│                                     │
+└─────────────────────────────────────┘</div>
+
+            <div class="info-box">
+                <h3>Confirmation Features</h3>
+                <ul>
+                    <li>Unique application ID generated</li>
+                    <li>Download link for filled application (HTML format)</li>
+                    <li>Clear submission instructions (Online & Offline)</li>
+                    <li>Required documents list</li>
+                    <li>Processing time estimate (6 weeks)</li>
+                    <li>Contact information (masked for prototype)</li>
+                    <li>Team credits displayed</li>
+                    <li>Option to fill another application</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showScreen('overview')">Back to Overview</button>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
